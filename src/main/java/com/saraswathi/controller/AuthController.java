@@ -22,12 +22,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody UserRequest user) {
-        authManager.authenticate(
+
+        var authentication = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getUsername(), user.getPassword()
                 )
         );
 
-        return jwtUtil.generateToken(user.getUsername());
+        // 🔥 Extract role from authenticated user
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
+
+        return jwtUtil.generateToken(user.getUsername(), role);
     }
 }

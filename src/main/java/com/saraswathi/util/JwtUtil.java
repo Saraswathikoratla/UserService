@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Date;
 
 @Component
 public class JwtUtil {
@@ -18,13 +19,15 @@ public class JwtUtil {
     }
 
     // ✅ GENERATE TOKEN
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
-                .signWith(getKey(), SignatureAlgorithm.HS256)   // ✅ FIX
+                .claim("role", role)   // 🔥 MUST ADD THIS
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .signWith(getKey())
                 .compact();
     }
-
     // ✅ EXTRACT USERNAME
     public String extractUsername(String token) {
         return Jwts.parserBuilder()
