@@ -20,11 +20,14 @@ import org.springframework.stereotype.Service;
         @Override
         public UserDetails loadUserByUsername(String username) {
 
-            User user = userRepository.findByUsername(username).get();
+            System.out.println("Loading user: " + username);
 
-            if (user == null) {
-                throw new UsernameNotFoundException("User not found");
-            }
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            System.out.println("DB username: " + user.getUsername());
+            System.out.println("DB password: " + user.getPassword());
+            System.out.println("DB role: " + user.getRole());
 
             return org.springframework.security.core.userdetails.User
                     .builder()

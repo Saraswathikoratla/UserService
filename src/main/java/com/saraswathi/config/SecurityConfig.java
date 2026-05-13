@@ -2,6 +2,7 @@ package com.saraswathi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -35,7 +36,9 @@ public class SecurityConfig {
                                 "/v3/api-docs",
                                 "/v3/api-docs/swagger-config",
                                 "/webjars/**"
-                        ).permitAll()
+
+                        ).permitAll().
+                        requestMatchers(HttpMethod.POST, "/user").permitAll()
                         .anyRequest().authenticated()
                 );
 
